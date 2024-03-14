@@ -1,0 +1,11 @@
+server:
+  port: 8088
+
+minio:
+  endpoint: http://127.0.0.1:9000
+  # Name of the storage bucket
+  bucketName: testbucket
+  # Access key for authentication
+  accessKey: root
+  # Secret key for authentication
+  secretKey: password
