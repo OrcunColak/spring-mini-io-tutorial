@@ -29,11 +29,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -219,9 +217,12 @@ public class MinioUtils {
     public ObjectWriteResponse uploadImage(String bucketName, String imageBase64, String imageName) {
         if (!StringUtils.isEmpty(imageBase64)) {
             InputStream in = base64ToInputStream(imageBase64);
+
             String newName = System.currentTimeMillis() + "_" + imageName + ".jpg";
-            String year = String.valueOf(new Date().getYear());
-            String month = String.valueOf(new Date().getMonth());
+
+            LocalDateTime currentTime = LocalDateTime.now();
+            String year = String.valueOf(currentTime.getYear());
+            String month = String.valueOf(currentTime.getMonthValue());
             return uploadFile(bucketName, year + "/" + month + "/" + newName, in);
 
         }
@@ -336,7 +337,11 @@ public class MinioUtils {
      */
     @SneakyThrows(Exception.class)
     public String getPresignedObjectUrl(String bucketName, String objectName, Integer expires) {
-        GetPresignedObjectUrlArgs args = GetPresignedObjectUrlArgs.builder().expiry(expires).bucket(bucketName).object(objectName).build();
+        GetPresignedObjectUrlArgs args = GetPresignedObjectUrlArgs.builder()
+                .expiry(expires)
+                .bucket(bucketName)
+                .object(objectName)
+                .build();
         return minioClient.getPresignedObjectUrl(args);
     }
 
@@ -352,11 +357,4 @@ public class MinioUtils {
         return minioClient.getPresignedObjectUrl(args);
     }
 
-    /**
-     * change URLDecoder to UTF8
-     */
-    public String getUtf8ByURLDecoder(String str) {
-        String url = str.replaceAll("%(?![0-9a-fA-F]{2})", "%25");
-        return URLDecoder.decode(url, StandardCharsets.UTF_8);
-    }
 }
