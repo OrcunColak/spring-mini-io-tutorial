@@ -4,7 +4,6 @@ import io.minio.BucketExistsArgs;
 import io.minio.CopyObjectArgs;
 import io.minio.CopySource;
 import io.minio.GetBucketPolicyArgs;
-import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.ListObjectsArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
@@ -15,7 +14,6 @@ import io.minio.RemoveObjectArgs;
 import io.minio.Result;
 import io.minio.StatObjectArgs;
 import io.minio.UploadObjectArgs;
-import io.minio.http.Method;
 import io.minio.messages.Bucket;
 import io.minio.messages.DeleteObject;
 import io.minio.messages.Item;
@@ -291,31 +289,6 @@ public class StorageService {
                 log.error("[MinioUtil]>>>>batch delete file，Exception：", e);
             }
         });
-    }
-
-    /**
-     * get file url
-     */
-    @SneakyThrows(Exception.class)
-    public String getPresignedObjectUrl(String bucketName, String objectName, Integer expires) {
-        GetPresignedObjectUrlArgs args = GetPresignedObjectUrlArgs.builder()
-                .expiry(expires)
-                .bucket(bucketName)
-                .object(objectName)
-                .build();
-        return minioClient.getPresignedObjectUrl(args);
-    }
-
-    /**
-     * get file url
-     */
-    @SneakyThrows(Exception.class)
-    public String getPresignedObjectUrl(String bucketName, String objectName) {
-        GetPresignedObjectUrlArgs args = GetPresignedObjectUrlArgs.builder()
-                .bucket(bucketName)
-                .object(objectName)
-                .method(Method.GET).build();
-        return minioClient.getPresignedObjectUrl(args);
     }
 
 }
