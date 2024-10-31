@@ -1,6 +1,6 @@
-package com.colak.springminiiotutorial.controller;
+package com.colak.springtutorial.controller;
 
-import com.colak.springminiiotutorial.config.MinioConfig;
+import com.colak.springtutorial.config.MinioConfig;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

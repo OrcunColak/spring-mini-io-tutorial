@@ -1,4 +1,4 @@
-package com.colak.springminiiotutorial.config;
+package com.colak.springtutorial.config;
 
 import io.minio.MinioClient;
 import lombok.Data;

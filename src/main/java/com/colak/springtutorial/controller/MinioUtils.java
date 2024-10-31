@@ -1,4 +1,4 @@
-package com.colak.springminiiotutorial.controller;
+package com.colak.springtutorial.controller;
 
 import io.minio.BucketExistsArgs;
 import io.minio.CopyObjectArgs;
