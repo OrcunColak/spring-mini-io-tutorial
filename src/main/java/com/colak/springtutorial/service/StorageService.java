@@ -1,10 +1,9 @@
-package com.colak.springtutorial.controller;
+package com.colak.springtutorial.service;
 
 import io.minio.BucketExistsArgs;
 import io.minio.CopyObjectArgs;
 import io.minio.CopySource;
 import io.minio.GetBucketPolicyArgs;
-import io.minio.GetObjectArgs;
 import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.ListObjectsArgs;
 import io.minio.MakeBucketArgs;
@@ -24,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
@@ -36,10 +35,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-@Slf4j
-@Component
+@Service
 @RequiredArgsConstructor
-public class MinioUtils {
+@Slf4j
+public class StorageService {
 
     private final MinioClient minioClient;
 
@@ -112,7 +111,7 @@ public class MinioUtils {
         try {
             minioClient.statObject(StatObjectArgs.builder().bucket(bucketName).object(objectName).build());
         } catch (Exception e) {
-            log.error("[MinioUtils]>>>>check file exist, Exception：", e);
+            log.error("[StorageService]>>>>check file exist, Exception：", e);
             exist = false;
         }
         return exist;
@@ -133,7 +132,7 @@ public class MinioUtils {
                 }
             }
         } catch (Exception e) {
-            log.error("[MinioUtils]>>>>check file exist, Exception：", e);
+            log.error("[StorageService]>>>>check file exist, Exception：", e);
             exist = false;
         }
         return exist;
@@ -156,32 +155,6 @@ public class MinioUtils {
             }
         }
         return list;
-    }
-
-    /**
-     * get file InputStream
-     */
-    @SneakyThrows(Exception.class)
-    public InputStream getObject(String bucketName, String objectName) {
-        return minioClient.getObject(
-                GetObjectArgs.builder()
-                        .bucket(bucketName)
-                        .object(objectName)
-                        .build());
-    }
-
-    /**
-     * Breakpoint download
-     */
-    @SneakyThrows(Exception.class)
-    public InputStream getObject(String bucketName, String objectName, long offset, long length) {
-        return minioClient.getObject(
-                GetObjectArgs.builder()
-                        .bucket(bucketName)
-                        .object(objectName)
-                        .offset(offset)
-                        .length(length)
-                        .build());
     }
 
     /**
@@ -229,7 +202,7 @@ public class MinioUtils {
         return null;
     }
 
-    public static InputStream base64ToInputStream(String base64) {
+    private static InputStream base64ToInputStream(String base64) {
         ByteArrayInputStream stream = null;
         try {
             byte[] bytes = Base64.getDecoder().decode(base64.trim());
@@ -278,18 +251,6 @@ public class MinioUtils {
                         .object(objectName)
                         .stream(new ByteArrayInputStream(new byte[]{}), 0, -1)
                         .build());
-    }
-
-    /**
-     * get file info
-     */
-    @SneakyThrows(Exception.class)
-    public String getFileStatusInfo(String bucketName, String objectName) {
-        return minioClient.statObject(
-                StatObjectArgs.builder()
-                        .bucket(bucketName)
-                        .object(objectName)
-                        .build()).toString();
     }
 
     /**
