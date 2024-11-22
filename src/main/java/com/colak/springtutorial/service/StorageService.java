@@ -27,7 +27,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.LinkedList;
 import java.util.List;
@@ -136,36 +135,6 @@ public class StorageService {
         return exist;
     }
 
-    /**
-     * Query files based on file prefix
-     */
-    @SneakyThrows(Exception.class)
-    public List<Item> getAllObjectsByPrefix(String bucketName,
-                                            String prefix,
-                                            boolean recursive) {
-        List<Item> list = new ArrayList<>();
-        Iterable<Result<Item>> objectsIterator = minioClient.listObjects(
-                ListObjectsArgs.builder().bucket(bucketName).prefix(prefix).recursive(recursive).build());
-        if (objectsIterator != null) {
-            for (Result<Item> o : objectsIterator) {
-                Item item = o.get();
-                list.add(item);
-            }
-        }
-        return list;
-    }
-
-    /**
-     * Get the list of files under the path
-     */
-    public Iterable<Result<Item>> listObjects(String bucketName, String prefix, boolean recursive) {
-        return minioClient.listObjects(
-                ListObjectsArgs.builder()
-                        .bucket(bucketName)
-                        .prefix(prefix)
-                        .recursive(recursive)
-                        .build());
-    }
 
     /**
      * use MultipartFile to upload files

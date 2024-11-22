@@ -1,6 +1,7 @@
 server:
   port: 8088
 
+# These properties are read via ConfigurationProperties
 minio:
   endpoint: http://127.0.0.1:9000
   # Name of the storage bucket
